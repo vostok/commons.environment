@@ -11,7 +11,7 @@ namespace Vostok.Commons.Environment
     [PublicAPI]
     internal static class ApplicationIdentity
     {
-        private static Lazy<string> identity = new Lazy<string>();
+        private static Lazy<string> identity = new Lazy<string>(GetIdentity);
 
         public static string Get()
         {
