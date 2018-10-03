@@ -32,7 +32,12 @@ namespace Vostok.Commons.Environment
         public static bool IsDotNetCore20 { get; } = IsDotNetCore && RuntimeEnvironment.GetRuntimeDirectory().Contains($"{Path.DirectorySeparatorChar}2.0.");
         
         /// <summary>
-        /// Returns <c>true</c> when the application is running on .NET Core 2.1.0 or later
+        /// Returns <c>true</c> when the application is running on .NET Core 2.1
+        /// </summary>
+        public static bool IsDotNetCore21 { get; } = IsDotNetCore && RuntimeEnvironment.GetRuntimeDirectory().Contains($"{Path.DirectorySeparatorChar}2.1.");
+        
+        /// <summary>
+        /// Returns <c>true</c> when the application is running on .NET Core 2.1.0 or newer
         /// </summary>
         public static bool IsDotNetCore21AndNewer { get; } = IsDotNetCore && RuntimeEnvironment.GetRuntimeDirectory().Contains($"{Path.DirectorySeparatorChar}2.") && !IsDotNetCore20;
 
