@@ -16,14 +16,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Title>TODO</Title>
-    <Description>TODO</Description>
+    <Title>Vostok.Commons.Environment</Title>
+    <Description>Vostok.Commons.Environment</Description>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/commons.environment</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/commons.environment/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>vostok</PackageTags>
+    <PackageTags>vostok vostok.commons</PackageTags>
     <RepositoryUrl>https://github.com/vostok/commons.environment</RepositoryUrl>
   </PropertyGroup>
 
