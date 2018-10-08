@@ -35,7 +35,8 @@ namespace Vostok.Commons.Environment
         /// Returns <c>true</c> when the application is running on .NET Core 2.1
         /// </summary>
         public static bool IsDotNetCore21 { get; } = IsDotNetCore && RuntimeEnvironment.GetRuntimeDirectory().Contains($"{Path.DirectorySeparatorChar}2.1.");
-        
+
+        // CR(iloktionov): This will likely stop working in .NET Core 3+
         /// <summary>
         /// Returns <c>true</c> when the application is running on .NET Core 2.1.0 or newer
         /// </summary>
