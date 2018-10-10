@@ -6,9 +6,6 @@ using JetBrains.Annotations;
 
 namespace Vostok.Commons.Environment
 {
-    // CR(iloktionov): 1. Rename to EnvironmentInfo
-    // CR(iloktionov): 2. Add local hostname provider
-    // CR(iloktionov): 3. Use it instead of https://github.com/vostok/tracing/blob/master/Vostok.Tracing/Helpers/EnvironmentHelper.cs
     /// <summary>
     /// Provides application name to identify different applications which use vostok libraries.
     /// </summary>
