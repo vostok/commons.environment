@@ -32,10 +32,7 @@ namespace Vostok.Commons.Environment.Tests
 
         #if NETCOREAPP2_1
         [Test]
-        public void Should_return_false_for_Core21_on_Core21() => RuntimeDetector.IsDotNetCore20.Should().BeFalse();
-        
-        [Test]
-        public void Should_detect_Core21() => RuntimeDetector.IsDotNetCore21.Should().BeTrue();
+        public void Should_return_false_for_Core20_on_Core21() => RuntimeDetector.IsDotNetCore20.Should().BeFalse();
         
         [Test]
         public void Should_detect_Core21_and_newer() => RuntimeDetector.IsDotNetCore21AndNewer.Should().BeTrue();
