@@ -22,7 +22,7 @@ namespace Vostok.Commons.Environment
         /// Returns <c>true</c> when the application is running on .NET Core
         /// </summary>
         public static bool IsDotNetCore { get; } = HasCoreLib();
-        
+
         /// <summary>
         /// Returns <c>true</c> when the application is running on .NET Framework
         /// </summary>

@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace Vostok.Commons.Environment
 {
     /// <summary>
-    /// Provides application name to identify different applications which use vostok libraries.
+    /// Provides information about environment where vostok-instrumented application is hosted.
     /// </summary>
     [PublicAPI]
     internal static class EnvironmentInfo
@@ -15,7 +15,14 @@ namespace Vostok.Commons.Environment
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
 
+        /// <summary>
+        /// Returns name of the application.
+        /// </summary>
         public static string Application => application.Value;
+        
+        /// <summary>
+        /// Returns name of machine which runs the application. 
+        /// </summary>
         public static string Host => host.Value;
 
         private static string ObtainApplicationName()
@@ -44,7 +51,7 @@ namespace Vostok.Commons.Environment
                 return null;
             }
         }
-        
+
         private static string GetEntryAssemblyNameOrNull()
         {
             try
@@ -56,7 +63,7 @@ namespace Vostok.Commons.Environment
                 return null;
             }
         }
-        
+
         private static string ObtainHostname()
         {
             try
