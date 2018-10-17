@@ -5,7 +5,7 @@ namespace Vostok.Commons.Environment.Tests
 {
     public class RuntimeDetector_Tests
     {
-        #if NEFRAMEWORK
+        #if NETFRAMEWORK
         [Test]
         public void Should_detect_Framework() => RuntimeDetector.IsDotNetFramework.Should().BeTrue();
     
@@ -14,9 +14,6 @@ namespace Vostok.Commons.Environment.Tests
     
         [Test]
         public void Should_return_false_for_Core20_on_Framework() => RuntimeDetector.IsDotNetCore20.Should().BeFalse();
-    
-        [Test]
-        public void Should_return_false_for_Core21_on_Framework() => RuntimeDetector.IsDotNetCore21.Should().BeFalse();
     
         [Test]
         public void Should_return_false_for_Core21AndNewer_on_Framework() => RuntimeDetector.IsDotNetCore21AndNewer.Should().BeFalse();
