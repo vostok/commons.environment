@@ -42,9 +42,9 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return typeof(HttpClient).Assembly.GetTypes().Any(x => string.Equals(x.FullName, "System.Net.Http.SocketsHttpHandler", StringComparison.Ordinal));
+                return typeof(HttpClient).Assembly.GetType("System.Net.Http.SocketsHttpHandler") != null;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
@@ -56,7 +56,7 @@ namespace Vostok.Commons.Environment
             {
                 return string.Equals(typeof(Stream).Assembly.GetName().Name, "System.Private.CoreLib", StringComparison.Ordinal);
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
