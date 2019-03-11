@@ -19,7 +19,7 @@ namespace Vostok.Commons.Environment
         /// Returns name of the application.
         /// </summary>
         public static string Application => application.Value;
-        
+
         /// <summary>
         /// Returns name of machine which runs the application. 
         /// </summary>
