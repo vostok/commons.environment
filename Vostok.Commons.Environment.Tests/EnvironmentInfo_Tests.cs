@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Vostok.Commons.Environment.Tests
 {
     [TestFixture]
-    public class EnvironmentInfo_Tests
+    internal class EnvironmentInfo_Tests
     {
         [Test]
         public static void Application_name_should_be_not_null_or_empty()

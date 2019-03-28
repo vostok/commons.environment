@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Vostok.Commons.Environment.Tests
 {
-    public class RuntimeDetector_Tests
+    internal class RuntimeDetector_Tests
     {
 #if NETFRAMEWORK
         [Test]
