@@ -37,6 +37,23 @@ namespace Vostok.Commons.Environment
         /// </summary>
         public static bool IsDotNetCore21AndNewer { get; } = IsDotNetCore && HasSocketsHttpHandler();
 
+        /// <summary>
+        /// Returns <c>true</c> when the application is running on .NET Core 3.0 or newer
+        /// </summary>
+        public static bool IsDotNetCore30AndNewer { get; } = IsDotNetCore && HasSystemRangeType();
+
+        private static bool HasCoreLib()
+        {
+            try
+            {
+                return string.Equals(typeof(Stream).Assembly.GetName().Name, "System.Private.CoreLib", StringComparison.Ordinal);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static bool HasSocketsHttpHandler()
         {
             try
@@ -49,11 +66,11 @@ namespace Vostok.Commons.Environment
             }
         }
 
-        private static bool HasCoreLib()
+        private static bool HasSystemRangeType()
         {
             try
             {
-                return string.Equals(typeof(Stream).Assembly.GetName().Name, "System.Private.CoreLib", StringComparison.Ordinal);
+                return Type.GetType("System.Range") != null;
             }
             catch
             {
