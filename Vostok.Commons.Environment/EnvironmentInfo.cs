@@ -14,6 +14,8 @@ namespace Vostok.Commons.Environment
     {
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
+        private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
+        private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
 
         /// <summary>
         /// Returns name of the application.
@@ -24,6 +26,21 @@ namespace Vostok.Commons.Environment
         /// Returns name of machine which runs the application. 
         /// </summary>
         public static string Host => host.Value;
+
+        /// <summary>
+        /// Returns name of current process. 
+        /// </summary>
+        public static string ProcessName => processName.Value;
+
+        /// <summary>
+        /// Returns id of current process. 
+        /// </summary>
+        public static int? ProcessId => processId.Value;
+
+        /// <summary>
+        /// Returns the base directory of current assembly.
+        /// </summary>
+        public static string BaseDirectory => GetBaseDirectory();
 
         private static string ObtainApplicationName()
         {
@@ -52,11 +69,35 @@ namespace Vostok.Commons.Environment
             }
         }
 
+        private static int? GetProcessIdOrNull()
+        {
+            try
+            {
+                return Process.GetCurrentProcess().Id;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private static string GetEntryAssemblyNameOrNull()
         {
             try
             {
                 return Assembly.GetEntryAssembly().GetName().Name;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string GetBaseDirectory()
+        {
+            try
+            {
+                return AppDomain.CurrentDomain.BaseDirectory;
             }
             catch
             {
