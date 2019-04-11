@@ -10,23 +10,42 @@ namespace Vostok.Commons.Environment
         [CanBeNull]
         public static DateTime? ExtractFromEntryAssembly()
         {
-            return ExtractFromAssembly(Assembly.GetEntryAssembly());
+            try
+            {
+                return ExtractFromAssembly(Assembly.GetEntryAssembly());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [CanBeNull]
         public static DateTime? ExtractFromAssembly(Assembly assembly)
         {
-            var assemblyTitle = AssemblyTitleParser.GetAssemblyTitle(assembly);
-
-            return ExtractFromTitle(assemblyTitle);
+            try
+            {
+                var assemblyTitle = AssemblyTitleParser.GetAssemblyTitle(assembly);
+                return ExtractFromTitle(assemblyTitle);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [CanBeNull]
         public static DateTime? ExtractFromAssembly(string assemblyPath)
         {
-            var version = AssemblyTitleParser.GetAssemblyFileVersion(assemblyPath);
-
-            return ExtractFromTitle(version?.FileDescription);
+            try
+            {
+                var version = AssemblyTitleParser.GetAssemblyFileVersion(assemblyPath);
+                return ExtractFromTitle(version?.FileDescription);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private static DateTime? ExtractFromTitle(string title)

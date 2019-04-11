@@ -17,12 +17,11 @@ namespace Vostok.Commons.Environment
         [CanBeNull]
         public static FileVersionInfo GetAssemblyFileVersion(string assemblyPath)
         {
-            if (!File.Exists(assemblyPath))
-                return null;
-
             try
             {
-                return FileVersionInfo.GetVersionInfo(assemblyPath);
+                return !File.Exists(assemblyPath) 
+                    ? null 
+                    : FileVersionInfo.GetVersionInfo(assemblyPath);
             }
             catch
             {
@@ -31,23 +30,37 @@ namespace Vostok.Commons.Environment
         }
 
         [CanBeNull]
-        public static string GetAssemblyTitle(Assembly assembly)
+        public static string GetAssemblyTitle([NotNull] Assembly assembly)
         {
-            var titleAttribute = assembly
-                .GetCustomAttributes(true)
-                .OfType<AssemblyTitleAttribute>()
-                .SingleOrDefault();
-            return titleAttribute?.Title;
+            try
+            {
+                var titleAttribute = assembly
+                    .GetCustomAttributes(true)
+                    .OfType<AssemblyTitleAttribute>()
+                    .SingleOrDefault();
+                return titleAttribute?.Title;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [CanBeNull]
-        public static string GetAssemblyInformationalVersion(Assembly assembly)
+        public static string GetAssemblyInformationalVersion([NotNull] Assembly assembly)
         {
-            var titleAttribute = assembly
-                .GetCustomAttributes(true)
-                .OfType<AssemblyInformationalVersionAttribute>()
-                .SingleOrDefault();
-            return titleAttribute?.InformationalVersion;
+            try
+            {
+                var titleAttribute = assembly
+                    .GetCustomAttributes(true)
+                    .OfType<AssemblyInformationalVersionAttribute>()
+                    .SingleOrDefault();
+                return titleAttribute?.InformationalVersion;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [CanBeNull]
@@ -82,12 +95,7 @@ namespace Vostok.Commons.Environment
         private static string GetCapturedGroupOrNull(Regex regex, string title)
         {
             var match = regex.Match(title);
-            if (!match.Success)
-            {
-                return null;
-            }
-
-            return match.Groups[2].Value.Trim();
+            return !match.Success ? null : match.Groups[2].Value.Trim();
         }
     }
 }
