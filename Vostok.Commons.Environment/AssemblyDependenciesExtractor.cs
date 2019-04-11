@@ -93,7 +93,7 @@ namespace Vostok.Commons.Environment
 
             public string FormatString()
             {
-                return $"{Name?.Replace(' ', '_').Replace(';', '_')} {CommitHash} {Date?.ToString("dd.MM.yyyy")}";
+                return $"{Name?.Replace(' ', '_')} {CommitHash} {Date?.ToString("dd.MM.yyyy")}";
             }
         }
     }
