@@ -19,8 +19,8 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return !File.Exists(assemblyPath) 
-                    ? null 
+                return !File.Exists(assemblyPath)
+                    ? null
                     : FileVersionInfo.GetVersionInfo(assemblyPath);
             }
             catch

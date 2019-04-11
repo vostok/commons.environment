@@ -42,11 +42,7 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                var dependencies = ExtractDependencies(assemblyPath);
-
-                return dependencies
-                    .Select(dep => $"{dep.Name?.Replace(' ', '_')} {dep.CommitHash} {dep.Date?.ToString("dd.MM.yyyy") ?? string.Empty}")
-                    .ToList();
+                return ExtractDependencies(assemblyPath).Select(dep => dep.FormatString()).ToList();
             }
             catch (Exception)
             {
@@ -81,7 +77,7 @@ namespace Vostok.Commons.Environment
                 return new Dependency
                 {
                     CommitHash = commitHash,
-                    Name = Path.GetFileNameWithoutExtension(info.OriginalFilename) ?? string.Empty,
+                    Name = Path.GetFileNameWithoutExtension(info.OriginalFilename),
                     Date = buildDate
                 };
             }
@@ -94,6 +90,11 @@ namespace Vostok.Commons.Environment
             public string Name;
             public string CommitHash;
             public DateTime? Date;
+
+            public string FormatString()
+            {
+                return $"{Name?.Replace(' ', '_').Replace(';', '_')} {CommitHash} {Date?.ToString("dd.MM.yyyy")}";
+            }
         }
     }
 }
