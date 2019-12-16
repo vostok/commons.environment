@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Vostok.Commons.Environment
 {
     [PublicAPI]
-    public static class AssemblyBuildTimeExtractor
+    internal static class AssemblyBuildTimeExtractor
     {
         [CanBeNull]
         public static DateTime? ExtractFromEntryAssembly()
