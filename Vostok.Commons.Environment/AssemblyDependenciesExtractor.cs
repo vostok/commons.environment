@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 namespace Vostok.Commons.Environment
 {
     [PublicAPI]
-    public static class AssemblyDependenciesExtractor
+    internal static class AssemblyDependenciesExtractor
     {
         [NotNull]
         public static List<string> ExtractFromEntryAssembly()

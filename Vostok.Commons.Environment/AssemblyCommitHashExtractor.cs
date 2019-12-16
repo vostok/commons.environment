@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Vostok.Commons.Environment
 {
     [PublicAPI]
-    public static class AssemblyCommitHashExtractor
+    internal static class AssemblyCommitHashExtractor
     {
         [CanBeNull]
         public static string ExtractFromEntryAssembly()
