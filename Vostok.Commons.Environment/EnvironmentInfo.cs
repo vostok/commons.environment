@@ -135,11 +135,13 @@ namespace Vostok.Commons.Environment
 
                     if (!string.IsNullOrEmpty(domainName))
                     {
+                        domainName = "." + domainName.TrimStart('.');
+
                         var hostName = Dns.GetHostName();
                         if (hostName.EndsWith(domainName))
                             return hostName;
 
-                        return $"{hostName}.{domainName.TrimStart('.')}";
+                        return hostName + domainName;
                     }
                 }
 
