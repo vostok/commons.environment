@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
 namespace Vostok.Commons.Environment
@@ -14,26 +16,32 @@ namespace Vostok.Commons.Environment
     {
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
+        private static Lazy<string> fqdn = new Lazy<string>(ObtainFQDN);
         private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
         private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
 
         /// <summary>
-        /// Returns name of the application.
+        /// Returns the name of the application.
         /// </summary>
         public static string Application => application.Value;
 
         /// <summary>
-        /// Returns name of machine which runs the application. 
+        /// Returns name of the machine which runs the application. 
         /// </summary>
         public static string Host => host.Value;
 
         /// <summary>
-        /// Returns name of current process. 
+        /// Returns the fully qualified domain name of the machine running the application.
+        /// </summary>
+        public static string FQDN => fqdn.Value;
+
+        /// <summary>
+        /// Returns the name of current process. 
         /// </summary>
         public static string ProcessName => processName.Value;
 
         /// <summary>
-        /// Returns id of current process. 
+        /// Returns the id of current process. 
         /// </summary>
         public static int? ProcessId => processId.Value;
 
@@ -85,7 +93,7 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return Assembly.GetEntryAssembly().GetName().Name;
+                return Assembly.GetEntryAssembly()?.GetName().Name;
             }
             catch
             {
@@ -114,6 +122,44 @@ namespace Vostok.Commons.Environment
             catch
             {
                 return "unknown";
+            }
+        }
+
+        private static string ObtainFQDN()
+        {
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var domainName = GetWindowsDomainName();
+
+                    if (!string.IsNullOrEmpty(domainName))
+                    {
+                        var hostName = Dns.GetHostName();
+                        if (hostName.EndsWith(domainName))
+                            return hostName;
+
+                        return $"{hostName}.{domainName.TrimStart('.')}";
+                    }
+                }
+
+                return Dns.GetHostEntry(Dns.GetHostName()).HostName;
+            }
+            catch
+            {
+                return ObtainHostname();
+            }
+        }
+
+        private static string GetWindowsDomainName()
+        {
+            try
+            {
+                return IPGlobalProperties.GetIPGlobalProperties().DomainName;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

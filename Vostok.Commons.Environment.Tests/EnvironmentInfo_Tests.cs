@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using FluentAssertions;
@@ -15,6 +16,14 @@ namespace Vostok.Commons.Environment.Tests
         [Test]
         public static void Host_name_should_be_not_null_or_empty()
             => string.IsNullOrEmpty(EnvironmentInfo.Application).Should().BeFalse();
+
+        [Test]
+        public void FQDN_should_not_be_null_or_empty()
+        {
+            EnvironmentInfo.FQDN.Should().NotBeNullOrEmpty();
+
+            Console.Out.WriteLine(EnvironmentInfo.FQDN);
+        }
 
         [Test]
         public static void ProcessName_should_be_current_process_name()
