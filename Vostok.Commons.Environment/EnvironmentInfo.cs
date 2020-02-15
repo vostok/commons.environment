@@ -18,6 +18,7 @@ namespace Vostok.Commons.Environment
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
         private static Lazy<string> fqdn = new Lazy<string>(ObtainFQDN);
         private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
+        private static Lazy<string> homeDirectory = new Lazy<string>(ObtainHomeDirectory);
         private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
 
         /// <summary>
@@ -49,6 +50,11 @@ namespace Vostok.Commons.Environment
         /// Returns the base directory of current assembly.
         /// </summary>
         public static string BaseDirectory => GetBaseDirectory();
+
+        /// <summary>
+        /// Returns the home directory of current user.
+        /// </summary>
+        public static string HomeDirectory => homeDirectory.Value;
 
         private static string ObtainApplicationName()
         {
@@ -158,6 +164,29 @@ namespace Vostok.Commons.Environment
             try
             {
                 return IPGlobalProperties.GetIPGlobalProperties().DomainName;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string ObtainHomeDirectory()
+        {
+            try
+            {
+                var home = System.Environment.GetEnvironmentVariable("HOME");
+
+                if (!string.IsNullOrEmpty(home))
+                    return home;
+
+                var homeDrive = System.Environment.GetEnvironmentVariable("HOMEDRIVE");
+                var homePath = System.Environment.GetEnvironmentVariable("HOMEPATH");
+
+                if (!string.IsNullOrEmpty(homeDrive) && !string.IsNullOrEmpty(homePath))
+                    return homeDrive + homePath;
+
+                return null;
             }
             catch
             {

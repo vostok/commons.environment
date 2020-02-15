@@ -26,6 +26,14 @@ namespace Vostok.Commons.Environment.Tests
         }
 
         [Test]
+        public void HomeDirectory_should_not_be_null_or_empty()
+        {
+            EnvironmentInfo.HomeDirectory.Should().NotBeNullOrEmpty();
+
+            Console.Out.WriteLine(EnvironmentInfo.HomeDirectory);
+        }
+
+        [Test]
         public static void ProcessName_should_be_current_process_name()
             => EnvironmentInfo.ProcessName.Should().Be(Process.GetCurrentProcess().ProcessName);
 
