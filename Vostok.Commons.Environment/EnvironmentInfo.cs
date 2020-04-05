@@ -14,6 +14,9 @@ namespace Vostok.Commons.Environment
     [PublicAPI]
     internal static class EnvironmentInfo
     {
+        public const string LocalHostnameVariable = "VOSTOK_LOCAL_HOSTNAME";
+        public const string LocalFQDNVariable = "VOSTOK_LOCAL_FQDN";
+
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
         private static Lazy<string> fqdn = new Lazy<string>(ObtainFQDN);
@@ -123,7 +126,8 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return Dns.GetHostName();
+                return System.Environment.GetEnvironmentVariable(LocalHostnameVariable)
+                       ?? Dns.GetHostName();
             }
             catch
             {
@@ -135,6 +139,14 @@ namespace Vostok.Commons.Environment
         {
             try
             {
+                var localFqdn = System.Environment.GetEnvironmentVariable(LocalFQDNVariable);
+                if (localFqdn != null)
+                    return localFqdn;
+
+                var localHostname = System.Environment.GetEnvironmentVariable(LocalHostnameVariable);
+                if (localHostname != null)
+                    return Dns.GetHostEntry(localHostname).HostName;
+
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     var domainName = GetWindowsDomainName();
@@ -143,7 +155,7 @@ namespace Vostok.Commons.Environment
                     {
                         domainName = "." + domainName.TrimStart('.');
 
-                        var hostName = Dns.GetHostName();
+                        var hostName = ObtainHostname();
                         if (hostName.EndsWith(domainName))
                             return hostName;
 
@@ -151,7 +163,7 @@ namespace Vostok.Commons.Environment
                     }
                 }
 
-                return Dns.GetHostEntry(Dns.GetHostName()).HostName;
+                return Dns.GetHostEntry(ObtainHostname()).HostName;
             }
             catch
             {
