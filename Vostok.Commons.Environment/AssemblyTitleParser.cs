@@ -35,7 +35,7 @@ namespace Vostok.Commons.Environment
             try
             {
                 var titleAttribute = assembly
-                    .GetCustomAttributes(true)
+                    ?.GetCustomAttributes(true)
                     .OfType<AssemblyTitleAttribute>()
                     .SingleOrDefault();
                 return titleAttribute?.Title;
@@ -52,7 +52,7 @@ namespace Vostok.Commons.Environment
             try
             {
                 var titleAttribute = assembly
-                    .GetCustomAttributes(true)
+                    ?.GetCustomAttributes(true)
                     .OfType<AssemblyInformationalVersionAttribute>()
                     .SingleOrDefault();
                 return titleAttribute?.InformationalVersion;
