@@ -66,7 +66,13 @@ namespace Vostok.Commons.Environment
                 if (RuntimeDetector.IsDotNetCore)
                     return GetEntryAssemblyNameOrNull();
 
-                return GetProcessNameOrNull() ?? GetEntryAssemblyNameOrNull();
+                var processNameOrNull = GetProcessNameOrNull();
+                var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
+
+                if (!string.IsNullOrEmpty(processNameOrNull) && processNameOrNull.ToLowerInvariant() != "w3wp")
+                    return processNameOrNull;
+
+                return assemblyNameOrNull ?? processNameOrNull;
             }
             catch
             {
