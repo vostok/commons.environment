@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
+// ReSharper disable ConstantConditionalAccessQualifier
+
 namespace Vostok.Commons.Environment
 {
     internal static class AssemblyTitleParser
