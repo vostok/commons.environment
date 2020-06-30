@@ -29,7 +29,9 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return ExtractFromAssembly(assembly.Location);
+                return assembly == null 
+                    ? new List<string>() 
+                    : ExtractFromAssembly(assembly.Location);
             }
             catch (Exception)
             {
