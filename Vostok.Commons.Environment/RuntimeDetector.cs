@@ -42,6 +42,11 @@ namespace Vostok.Commons.Environment
         /// </summary>
         public static bool IsDotNetCore30AndNewer { get; } = IsDotNetCore && HasSystemRangeType();
 
+        /// <summary>
+        /// Returns <c>true</c> when the application is running on .NET 5.0 or newer
+        /// </summary>
+        public static bool IsDotNet50AndNewer { get; } = HasSystemHalfType();
+
         private static bool HasCoreLib()
         {
             try
@@ -71,6 +76,18 @@ namespace Vostok.Commons.Environment
             try
             {
                 return Type.GetType("System.Range") != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool HasSystemHalfType()
+        {
+            try
+            {
+                return Type.GetType("System.Half") != null;
             }
             catch
             {
