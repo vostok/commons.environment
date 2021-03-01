@@ -69,7 +69,7 @@ namespace Vostok.Commons.Environment
                 var processNameOrNull = GetProcessNameOrNull();
                 var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
 
-                if (!string.IsNullOrEmpty(processNameOrNull) && processNameOrNull.ToLowerInvariant() != "w3wp")
+                if (!string.IsNullOrEmpty(processNameOrNull) && processNameOrNull.ToLowerInvariant() != "w3wp" && processNameOrNull.ToLowerInvariant() != "iisexpress")
                     return processNameOrNull;
 
                 return assemblyNameOrNull ?? processNameOrNull;
