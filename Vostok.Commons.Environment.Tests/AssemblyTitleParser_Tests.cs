@@ -18,8 +18,7 @@ Build date: 2021-07-02T15:24:38.3740000+05:00";
         public static void AssemblyTitleParser_should_parse_valid_title()
         {
             AssemblyTitleParser.ParseCommitHash(ValidTitle).Should().Be("c2c780c5a3c3b58f072a93b89e508d0a622aa332");
-            AssemblyTitleParser.ParseBuildDate(ValidTitle).Should().Be(new DateTime(2021, 07, 02, 15, 24, 38, 374, DateTimeKind.Local));
-            AssemblyTitleParser.ParseCommitTime(ValidTitle).Should().Be(new DateTime(2021, 06, 08, 16, 58, 19, DateTimeKind.Local));
+            AssemblyTitleParser.ParseCommitTime(ValidTitle).Should().Be(new DateTimeOffset(2021, 06, 08, 16, 58, 19, TimeSpan.FromHours(5)));
         }
     }
 }

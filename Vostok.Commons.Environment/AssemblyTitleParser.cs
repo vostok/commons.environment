@@ -96,7 +96,7 @@ namespace Vostok.Commons.Environment
         }
         
         [CanBeNull]
-        public static DateTime? ParseCommitTime(string title)
+        public static DateTimeOffset? ParseCommitTime(string title)
         {
             try
             {
