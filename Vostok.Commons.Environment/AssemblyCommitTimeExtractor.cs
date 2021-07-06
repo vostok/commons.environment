@@ -8,7 +8,7 @@ namespace Vostok.Commons.Environment
     internal static class AssemblyCommitTimeExtractor
     {
         [CanBeNull]
-        public static DateTime? ExtractFromEntryAssembly()
+        public static DateTimeOffset? ExtractFromEntryAssembly()
         {
             try
             {
@@ -21,10 +21,12 @@ namespace Vostok.Commons.Environment
         }
 
         [CanBeNull]
-        public static DateTime? ExtractFromAssembly(Assembly assembly)
+        public static DateTimeOffset? ExtractFromAssembly(Assembly assembly)
         {
             try
             {
+                if (assembly == null)
+                    return null;
                 var assemblyTitle = AssemblyTitleParser.GetAssemblyTitle(assembly);
                 return ExtractFromTitle(assemblyTitle);
             }
@@ -35,7 +37,7 @@ namespace Vostok.Commons.Environment
         }
 
         [CanBeNull]
-        public static DateTime? ExtractFromAssembly(string assemblyPath)
+        public static DateTimeOffset? ExtractFromAssembly(string assemblyPath)
         {
             try
             {
@@ -48,7 +50,7 @@ namespace Vostok.Commons.Environment
             }
         }
 
-        private static DateTime? ExtractFromTitle(string title)
+        private static DateTimeOffset? ExtractFromTitle(string title)
         {
             return title == null ? null : AssemblyTitleParser.ParseCommitTime(title);
         }
