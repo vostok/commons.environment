@@ -101,7 +101,7 @@ namespace Vostok.Commons.Environment
             try
             {
                 var buildTimeString = GetCapturedGroupOrNull(CommitDateRegex, title);
-                return DateTime.ParseExact(buildTimeString, "yyyy-MM-dd HH:mm:ss K", CultureInfo.InvariantCulture);
+                return DateTimeOffset.ParseExact(buildTimeString, "yyyy-MM-dd HH:mm:ss K", CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
