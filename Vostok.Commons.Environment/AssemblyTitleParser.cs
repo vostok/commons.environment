@@ -14,6 +14,7 @@ namespace Vostok.Commons.Environment
     internal static class AssemblyTitleParser
     {
         private static readonly Regex BuildDateRegex = new Regex(@"^(Build date:) (.*)$", RegexOptions.Multiline);
+        private static readonly Regex CommitDateRegex = new Regex(@"^(Date:) (.*)$", RegexOptions.Multiline);
         private static readonly Regex CommitHashRegex = new Regex(@"^(Commit:|git) (.*)$", RegexOptions.Multiline);
 
         [CanBeNull]
@@ -87,6 +88,20 @@ namespace Vostok.Commons.Environment
                 var commitHash = GetCapturedGroupOrNull(CommitHashRegex, title);
 
                 return commitHash?.ToLower();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        
+        [CanBeNull]
+        public static DateTimeOffset? ParseCommitTime(string title)
+        {
+            try
+            {
+                var buildTimeString = GetCapturedGroupOrNull(CommitDateRegex, title);
+                return DateTimeOffset.ParseExact(buildTimeString, "yyyy-MM-dd HH:mm:ss K", CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
