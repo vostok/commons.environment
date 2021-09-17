@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -67,12 +69,22 @@ namespace Vostok.Commons.Environment
                     return GetEntryAssemblyNameOrNull();
 
                 var processNameOrNull = GetProcessNameOrNull();
-                var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
 
                 if (!string.IsNullOrEmpty(processNameOrNull) && processNameOrNull.ToLowerInvariant() != "w3wp" && processNameOrNull.ToLowerInvariant() != "iisexpress")
                     return processNameOrNull;
 
-                return assemblyNameOrNull ?? processNameOrNull;
+                var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
+                if (!string.IsNullOrEmpty(assemblyNameOrNull))
+                    return assemblyNameOrNull;
+
+                var directory = GetBaseDirectory() ?? string.Empty;
+                var segments = directory.Split(new[] {Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
+                if (!string.IsNullOrEmpty(processNameOrNull))
+                    segments.Insert(0, processNameOrNull);
+                if (segments.Any())
+                    return string.Join("/", segments);
+
+                return null;
             }
             catch
             {
