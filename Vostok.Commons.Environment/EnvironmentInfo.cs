@@ -80,7 +80,7 @@ namespace Vostok.Commons.Environment
                 var directory = GetBaseDirectory() ?? string.Empty;
                 var segments = directory.Split(new[] {Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
                 if (!string.IsNullOrEmpty(processNameOrNull))
-                    segments.Insert(0, processNameOrNull);
+                    segments.Add(processNameOrNull);
                 if (segments.Any())
                     return string.Join("/", segments);
 
