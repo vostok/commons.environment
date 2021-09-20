@@ -233,7 +233,7 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                var assembly = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(a => a.GetName().Name == "System.Web");
+                var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "System.Web");
                 if (assembly == null)
                     return null;
                 
@@ -256,7 +256,7 @@ namespace Vostok.Commons.Environment
                     .GetProperty(name, BindingFlags.Public | BindingFlags.Static)
                     .GetMethod.Invoke(null, Array.Empty<object>());
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
