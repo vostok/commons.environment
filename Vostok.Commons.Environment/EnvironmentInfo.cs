@@ -1,5 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -67,12 +70,26 @@ namespace Vostok.Commons.Environment
                     return GetEntryAssemblyNameOrNull();
 
                 var processNameOrNull = GetProcessNameOrNull();
-                var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
 
                 if (!string.IsNullOrEmpty(processNameOrNull) && processNameOrNull.ToLowerInvariant() != "w3wp" && processNameOrNull.ToLowerInvariant() != "iisexpress")
                     return processNameOrNull;
 
-                return assemblyNameOrNull ?? processNameOrNull;
+                var assemblyNameOrNull = GetEntryAssemblyNameOrNull();
+                if (!string.IsNullOrEmpty(assemblyNameOrNull))
+                    return assemblyNameOrNull;
+
+                var iisNameOrNull = GetIisApplication();
+                if (!string.IsNullOrEmpty(iisNameOrNull))
+                    return iisNameOrNull;
+                
+                var directory = GetBaseDirectory() ?? string.Empty;
+                var segments = directory.Split(new[] {Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
+                if (!string.IsNullOrEmpty(processNameOrNull))
+                    segments.Add(processNameOrNull);
+                if (segments.Any())
+                    return string.Join("/", segments);
+
+                return null;
             }
             catch
             {
@@ -207,6 +224,39 @@ namespace Vostok.Commons.Environment
                 return null;
             }
             catch
+            {
+                return null;
+            }
+        }
+
+        private static string GetIisApplication()
+        {
+            try
+            {
+                var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "System.Web");
+                if (assembly == null)
+                    return null;
+                
+                var type = assembly.GetType("System.Web.Hosting.HostingEnvironment");
+                if (type == null)
+                    return null;
+
+                if (!Invoke<bool>("IsHosted"))
+                    return null;
+
+                var vPath = Invoke<string>("ApplicationVirtualPath");
+                var siteName = Invoke<string>("SiteName");
+                if (vPath == null || vPath == "/")
+                    return siteName;
+
+                return siteName + vPath;
+
+                // ReSharper disable once PossibleNullReferenceException
+                T Invoke<T>(string name) => (T)type
+                    .GetProperty(name, BindingFlags.Public | BindingFlags.Static)
+                    .GetMethod.Invoke(null, Array.Empty<object>());
+            }
+            catch (Exception)
             {
                 return null;
             }
