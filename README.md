@@ -1,6 +1,6 @@
 # Vostok.Commons.Environment
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/vostok/commons.environment?svg=true&branch=master)](https://ci.appveyor.com/project/vostok/commons.environment/branch/master)
+[![Build & Test & Publish](https://github.com/vostok/commons.environment/actions/workflows/ci.yml/badge.svg)](https://github.com/vostok/commons.environment/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/Vostok.Commons.Environment.svg)](https://www.nuget.org/packages/Vostok.Commons.Environment)
 
 ...
