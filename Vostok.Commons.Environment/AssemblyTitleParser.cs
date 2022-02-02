@@ -94,7 +94,7 @@ namespace Vostok.Commons.Environment
                 return null;
             }
         }
-        
+
         [CanBeNull]
         public static DateTimeOffset? ParseCommitTime(string title)
         {

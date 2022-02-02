@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -81,7 +80,7 @@ namespace Vostok.Commons.Environment
                 var iisNameOrNull = GetIisApplication();
                 if (!string.IsNullOrEmpty(iisNameOrNull))
                     return iisNameOrNull;
-                
+
                 var directory = GetBaseDirectory() ?? string.Empty;
                 var segments = directory.Split(new[] {Path.DirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).Skip(1).ToList();
                 if (!string.IsNullOrEmpty(processNameOrNull))
@@ -236,7 +235,7 @@ namespace Vostok.Commons.Environment
                 var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "System.Web");
                 if (assembly == null)
                     return null;
-                
+
                 var type = assembly.GetType("System.Web.Hosting.HostingEnvironment");
                 if (type == null)
                     return null;
