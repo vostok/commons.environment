@@ -46,7 +46,7 @@ namespace Vostok.Commons.Environment
         /// Returns <c>true</c> when the application is running on .NET 5.0 or newer
         /// </summary>
         public static bool IsDotNet50AndNewer { get; } = HasSystemHalfType();
-        
+
         /// <summary>
         /// Returns <c>true</c> when the application is running on .NET 6.0 or newer
         /// </summary>
@@ -99,7 +99,7 @@ namespace Vostok.Commons.Environment
                 return false;
             }
         }
-        
+
         private static bool HasDateOnlyType()
         {
             try

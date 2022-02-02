@@ -13,7 +13,7 @@ Author: something
 Date: 2021-06-08 16:58:19 +0500 
 Ref names:  (HEAD -> master, origin/master, origin/HEAD)
 Build date: 2021-07-02T15:24:38.3740000+05:00";
-        
+
         [Test]
         public static void AssemblyTitleParser_should_parse_valid_title()
         {
