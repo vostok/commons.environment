@@ -220,6 +220,10 @@ namespace Vostok.Commons.Environment
                 if (!string.IsNullOrEmpty(homeDrive) && !string.IsNullOrEmpty(homePath))
                     return homeDrive + homePath;
 
+                var userProfile = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
+                if (!string.IsNullOrEmpty(userProfile))
+                    return userProfile;
+
                 return null;
             }
             catch
