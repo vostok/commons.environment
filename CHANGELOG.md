@@ -1,3 +1,7 @@
+## 0.1.4 (22-08-2022):
+
+Read Home Directory from `System.Environment.SpecialFolder.UserProfile`.
+
 ## 0.1.3 (06-12-2021):
 
 Added `net6.0` target.
