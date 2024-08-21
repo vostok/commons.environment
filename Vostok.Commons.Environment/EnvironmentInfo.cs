@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Vostok.Commons.Environment
@@ -18,6 +20,7 @@ namespace Vostok.Commons.Environment
     {
         public const string LocalHostnameVariable = "VOSTOK_LOCAL_HOSTNAME";
         public const string LocalFQDNVariable = "VOSTOK_LOCAL_FQDN";
+        public const string LocalServiceDiscoveryIPv4 = "VOSTOK_LOCAL_SERVICE_DISCOVERY_IPV4";
 
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
@@ -25,6 +28,8 @@ namespace Vostok.Commons.Environment
         private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
         private static Lazy<string> homeDirectory = new Lazy<string>(ObtainHomeDirectory);
         private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
+
+        private static readonly TimeSpan CacheTtl = TimeSpan.FromSeconds(3);
 
         /// <summary>
         /// Returns the name of the application.
@@ -40,6 +45,11 @@ namespace Vostok.Commons.Environment
         /// Returns the fully qualified domain name of the machine running the application.
         /// </summary>
         public static string FQDN => fqdn.Value;
+
+        /// <summary>
+        /// Returns the IPv4 of the machine running the application.
+        /// </summary>
+        public static volatile string ServiceDiscoveryIPv4;
 
         /// <summary>
         /// Returns the name of current process. 
@@ -60,6 +70,18 @@ namespace Vostok.Commons.Environment
         /// Returns the home directory of current user.
         /// </summary>
         public static string HomeDirectory => homeDirectory.Value;
+
+        static EnvironmentInfo()
+        {
+            UpdateAndSchedule();
+        }
+
+        private static void UpdateAndSchedule()
+        {
+            ServiceDiscoveryIPv4 = ObtainServiceDiscoveryIPv4();
+
+            Task.Delay(CacheTtl).ContinueWith(_ => UpdateAndSchedule());
+        }
 
         private static string ObtainApplicationName()
         {
@@ -190,6 +212,39 @@ namespace Vostok.Commons.Environment
             catch
             {
                 return ObtainHostname();
+            }
+        }
+
+        private static string ObtainServiceDiscoveryIPv4()
+        {
+            try
+            {
+                var localIpV4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4);
+                if (localIpV4 != null)
+                    return localIpV4;
+
+                var dnsAddresses = Dns.GetHostAddresses(ObtainHostname());
+
+                var interfaceAddresses = NetworkInterface
+                    .GetAllNetworkInterfaces()
+                    .Where(iface => iface.OperationalStatus == OperationalStatus.Up)
+                    .Where(iface => iface.GetIPProperties().GatewayAddresses.Any(info => !info.Address.Equals(IPAddress.Any)))
+                    .SelectMany(iface => iface.GetIPProperties().UnicastAddresses)
+                    .Select(info => info.Address)
+                    .ToList();
+
+                var address = dnsAddresses
+                    .Where(address => address.AddressFamily == AddressFamily.InterNetwork)
+                    .Where(address => !IPAddress.IsLoopback(address))
+                    .Where(address => interfaceAddresses.Contains(address))
+                    .Select(address => address.ToString())
+                    .FirstOrDefault();
+
+                return address;
+            }
+            catch
+            {
+                return null;
             }
         }
 
