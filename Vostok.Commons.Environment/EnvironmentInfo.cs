@@ -20,7 +20,7 @@ namespace Vostok.Commons.Environment
     {
         public const string LocalHostnameVariable = "VOSTOK_LOCAL_HOSTNAME";
         public const string LocalFQDNVariable = "VOSTOK_LOCAL_FQDN";
-        public const string LocalServiceDiscoveryIPv4 = "VOSTOK_LOCAL_SERVICE_DISCOVERY_IPV4";
+        public const string LocalServiceDiscoveryIPv4Variable = "VOSTOK_LOCAL_SERVICE_DISCOVERY_IPV4";
 
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
@@ -219,7 +219,7 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                var localIpV4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4);
+                var localIpV4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
                 if (localIpV4 != null)
                     return localIpV4;
 
