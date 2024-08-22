@@ -7,7 +7,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Vostok.Commons.Environment
@@ -25,11 +24,10 @@ namespace Vostok.Commons.Environment
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
         private static Lazy<string> fqdn = new Lazy<string>(ObtainFQDN);
+        private static Lazy<string> serviceDiscoveryIPv4 = new Lazy<string>(ObtainServiceDiscoveryIPv4);
         private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
         private static Lazy<string> homeDirectory = new Lazy<string>(ObtainHomeDirectory);
         private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
-
-        private static readonly TimeSpan CacheTtl = TimeSpan.FromSeconds(3);
 
         /// <summary>
         /// Returns the name of the application.
@@ -47,9 +45,9 @@ namespace Vostok.Commons.Environment
         public static string FQDN => fqdn.Value;
 
         /// <summary>
-        /// Returns the IPv4 of the machine running the application.
+        /// Returns the IPv4 through which the application is accessible on the hosting network.
         /// </summary>
-        public static volatile string ServiceDiscoveryIPv4;
+        public static string ServiceDiscoveryIPv4 => serviceDiscoveryIPv4.Value;
 
         /// <summary>
         /// Returns the name of current process. 
@@ -70,18 +68,6 @@ namespace Vostok.Commons.Environment
         /// Returns the home directory of current user.
         /// </summary>
         public static string HomeDirectory => homeDirectory.Value;
-
-        static EnvironmentInfo()
-        {
-            UpdateAndSchedule();
-        }
-
-        private static void UpdateAndSchedule()
-        {
-            ServiceDiscoveryIPv4 = ObtainServiceDiscoveryIPv4();
-
-            Task.Delay(CacheTtl).ContinueWith(_ => UpdateAndSchedule());
-        }
 
         private static string ObtainApplicationName()
         {
