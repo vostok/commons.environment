@@ -46,6 +46,7 @@ namespace Vostok.Commons.Environment
 
         /// <summary>
         /// Returns the IPv4 through which the application is accessible on the hosting network.
+        /// This value is obtained once when the application starts and is cached for subsequent calls.
         /// </summary>
         public static string ServiceDiscoveryIPv4 => serviceDiscoveryIPv4.Value;
 
@@ -205,28 +206,7 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                var localIpV4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
-                if (localIpV4 != null)
-                    return localIpV4;
-
-                var dnsAddresses = Dns.GetHostAddresses(ObtainHostname());
-
-                var interfaceAddresses = NetworkInterface
-                    .GetAllNetworkInterfaces()
-                    .Where(iface => iface.OperationalStatus == OperationalStatus.Up)
-                    .Where(iface => iface.GetIPProperties().GatewayAddresses.Any(info => !info.Address.Equals(IPAddress.Any)))
-                    .SelectMany(iface => iface.GetIPProperties().UnicastAddresses)
-                    .Select(info => info.Address)
-                    .ToList();
-
-                var address = dnsAddresses
-                    .Where(address => address.AddressFamily == AddressFamily.InterNetwork)
-                    .Where(address => !IPAddress.IsLoopback(address))
-                    .Where(address => interfaceAddresses.Contains(address))
-                    .Select(address => address.ToString())
-                    .FirstOrDefault();
-
-                return address;
+                return System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
             }
             catch
             {
