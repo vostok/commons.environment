@@ -206,7 +206,11 @@ namespace Vostok.Commons.Environment
         {
             try
             {
-                return System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
+                var localIPv4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
+                if (!string.IsNullOrEmpty(localIPv4))
+                    return localIPv4;
+
+                return null;
             }
             catch
             {

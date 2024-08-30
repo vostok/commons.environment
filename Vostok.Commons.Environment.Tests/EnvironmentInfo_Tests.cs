@@ -26,9 +26,9 @@ namespace Vostok.Commons.Environment.Tests
         }
 
         [Test]
-        public void ServiceDiscoveryIPv4_should_be_null_or_empty_if_environment_variable_is_not_set()
+        public void ServiceDiscoveryIPv4_should_be_null_if_environment_variable_is_not_set()
         {
-            EnvironmentInfo.ServiceDiscoveryIPv4.Should().BeNullOrEmpty();
+            EnvironmentInfo.ServiceDiscoveryIPv4.Should().BeNull();
 
             Console.Out.WriteLine(EnvironmentInfo.ServiceDiscoveryIPv4);
         }
