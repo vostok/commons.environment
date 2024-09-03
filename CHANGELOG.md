@@ -1,4 +1,4 @@
-## 0.1.5 (03-09-2024):
+## 0.1.6 (03-09-2024):
 
 Added `ServiceDiscoveryIPv4` to `EnvironmentInfo`
 
