@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
@@ -18,10 +19,12 @@ namespace Vostok.Commons.Environment
     {
         public const string LocalHostnameVariable = "VOSTOK_LOCAL_HOSTNAME";
         public const string LocalFQDNVariable = "VOSTOK_LOCAL_FQDN";
+        public const string LocalServiceDiscoveryIPv4Variable = "VOSTOK_LOCAL_SERVICE_DISCOVERY_IPV4";
 
         private static Lazy<string> application = new Lazy<string>(ObtainApplicationName);
         private static Lazy<string> host = new Lazy<string>(ObtainHostname);
         private static Lazy<string> fqdn = new Lazy<string>(ObtainFQDN);
+        private static Lazy<string> serviceDiscoveryIPv4 = new Lazy<string>(ObtainServiceDiscoveryIPv4);
         private static Lazy<string> processName = new Lazy<string>(GetProcessNameOrNull);
         private static Lazy<string> homeDirectory = new Lazy<string>(ObtainHomeDirectory);
         private static Lazy<int?> processId = new Lazy<int?>(GetProcessIdOrNull);
@@ -40,6 +43,12 @@ namespace Vostok.Commons.Environment
         /// Returns the fully qualified domain name of the machine running the application.
         /// </summary>
         public static string FQDN => fqdn.Value;
+
+        /// <summary>
+        /// Returns the IPv4 through which the application is accessible on the hosting network.
+        /// This value is obtained once when the application starts and is cached for subsequent calls.
+        /// </summary>
+        public static string ServiceDiscoveryIPv4 => serviceDiscoveryIPv4.Value;
 
         /// <summary>
         /// Returns the name of current process. 
@@ -190,6 +199,22 @@ namespace Vostok.Commons.Environment
             catch
             {
                 return ObtainHostname();
+            }
+        }
+
+        private static string ObtainServiceDiscoveryIPv4()
+        {
+            try
+            {
+                var localIPv4 = System.Environment.GetEnvironmentVariable(LocalServiceDiscoveryIPv4Variable);
+                if (!string.IsNullOrEmpty(localIPv4))
+                    return localIPv4;
+
+                return null;
+            }
+            catch
+            {
+                return null;
             }
         }
 

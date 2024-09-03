@@ -1,3 +1,7 @@
+## 0.1.5 (03-09-2024):
+
+Added `ServiceDiscoveryIPv4` to `EnvironmentInfo`
+
 ## 0.1.4 (22-08-2022):
 
 Read Home Directory from `System.Environment.SpecialFolder.UserProfile`.

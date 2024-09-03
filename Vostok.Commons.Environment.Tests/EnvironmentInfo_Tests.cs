@@ -15,7 +15,7 @@ namespace Vostok.Commons.Environment.Tests
 
         [Test]
         public static void Host_name_should_be_not_null_or_empty()
-            => string.IsNullOrEmpty(EnvironmentInfo.Application).Should().BeFalse();
+            => string.IsNullOrEmpty(EnvironmentInfo.Host).Should().BeFalse();
 
         [Test]
         public void FQDN_should_not_be_null_or_empty()
@@ -23,6 +23,14 @@ namespace Vostok.Commons.Environment.Tests
             EnvironmentInfo.FQDN.Should().NotBeNullOrEmpty();
 
             Console.Out.WriteLine(EnvironmentInfo.FQDN);
+        }
+
+        [Test]
+        public void ServiceDiscoveryIPv4_should_be_null_if_environment_variable_is_not_set()
+        {
+            EnvironmentInfo.ServiceDiscoveryIPv4.Should().BeNull();
+
+            Console.Out.WriteLine(EnvironmentInfo.ServiceDiscoveryIPv4);
         }
 
         [Test]
