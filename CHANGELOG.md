@@ -1,3 +1,7 @@
+## 0.1.7 (09-12-2024): 
+
+Bump NuGet deps versions
+
 ## 0.1.6 (03-09-2024):
 
 Added `ServiceDiscoveryIPv4` to `EnvironmentInfo`
