@@ -82,7 +82,7 @@ namespace Vostok.Commons.Environment
 
                 if (informationalVersion != null)
                 {
-                    var versionAndCommit = informationalVersion.Split(["+"], StringSplitOptions.RemoveEmptyEntries);
+                    var versionAndCommit = informationalVersion.Split(new[] {"+"}, StringSplitOptions.RemoveEmptyEntries);
                     if (versionAndCommit.Length == 2)
                         return versionAndCommit[1];
                 }
