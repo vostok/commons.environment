@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
@@ -28,8 +29,12 @@ namespace Vostok.Commons.Environment
                 if (assembly == null)
                     return null;
 
+                var commitHash = GetCommitHashFromAssemblyInformationalVersion(assembly);
+                if (commitHash != null)
+                    return commitHash;
+
                 var assemblyTitle = AssemblyTitleParser.GetAssemblyTitle(assembly);
-                var commitHash = ExtractFromTitle(assemblyTitle);
+                commitHash = ExtractFromTitle(assemblyTitle);
                 if (!string.IsNullOrEmpty(commitHash))
                     return commitHash;
 
@@ -64,6 +69,30 @@ namespace Vostok.Commons.Environment
         private static string ExtractFromTitle(string title)
         {
             return title == null ? null : AssemblyTitleParser.ParseCommitHash(title);
+        }
+        
+        private static string GetCommitHashFromAssemblyInformationalVersion(Assembly assembly)
+        {
+            try
+            {
+                var informationalVersion = assembly.GetCustomAttributes(true)
+                    .OfType<AssemblyInformationalVersionAttribute>()
+                    .SingleOrDefault()
+                    ?.InformationalVersion;
+
+                if (informationalVersion != null)
+                {
+                    var versionAndCommit = informationalVersion.Split(["+"], StringSplitOptions.RemoveEmptyEntries);
+                    if (versionAndCommit.Length == 2)
+                        return versionAndCommit[1];
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
