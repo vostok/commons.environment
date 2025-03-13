@@ -1,4 +1,4 @@
-## 0.1.8 (13-03-2025):
+## 0.1.9 (13-03-2025):
 
 SourceLink integration. Now library can extract CommitHash from `AssemblyInformationalVersionAttribute` which should have been filled by SourceLink if Net8+ build tools were used.
 
