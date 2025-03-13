@@ -1,3 +1,7 @@
+## 0.1.8 (13-03-2025):
+
+SourceLink integration. Now library can extract CommitHash from `AssemblyInformationalVersionAttribute` which should have been filled by SourceLink if Net8+ build tools were used.
+
 ## 0.1.7 (09-12-2024): 
 
 Bump NuGet deps versions
